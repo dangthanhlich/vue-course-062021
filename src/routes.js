@@ -1,5 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
+import App from './App'
+import Sidebar from './components/Sidebar'
+import Footer from './components/Footer'
 import Dashboard from './views/dashboard/Index'
 import UserIndex from './views/users/Index'
 import UserCreate from './views/users/Create'
@@ -13,36 +16,68 @@ const routes = [
     {
         path: '/',
         name: 'Home',
-        component: Dashboard
+        title: 'Dashboard',
+        components: {
+            default: Dashboard,
+            Sidebar
+        }
     },
     {
         path: '/user',
-        name: 'user.index',
-        component: UserIndex,
-    },
-    {
-        path: '/user/create',
-        name: 'user.create',
-        component: UserCreate,
-    },
-    {
-        path: '/user/edit/:id',
-        name: 'user.edit',
-        component: UserEdit,
-    },
-    {
-        path: '/user/edit/:id/group/:groupId',
-        name: 'user.group.edit',
-        component: UserEdit,
+        meta: { requireAuth: false },
+        title: 'User management',
+        component: App,
+        children: [
+            {
+                path: '',
+                name: 'user.index',
+                title: 'User List',
+                components: {
+                    default: UserIndex,
+                    Sidebar
+                }
+            },
+            {
+                path: 'create',
+                name: 'user.create',
+                title: 'User Create',
+                components: {
+                    default: UserCreate,
+                    Sidebar,
+                }
+            },
+            {
+                path: 'edit/:id',
+                name: 'user.edit',
+                title: 'User Edit',
+                components: {
+                    default: UserEdit,
+                    Sidebar,
+                }
+            },
+        ]
     },
     {
         path: '/task',
         name: 'task.index',
-        component: TaskIndex
+        title: 'Task management',
+        components: {
+            default: TaskIndex,
+            Sidebar,
+            Footer
+        },
+        meta: { requireAuth: false },
     },
     {
         path: '/project',
         name: 'project.index',
+        title: 'Project management',
+        component: ProjectIndex
+    },
+    {
+        path: '/product',
+        name: 'product.index',
+        title: 'Product management',
         component: ProjectIndex
     },
     {
@@ -57,16 +92,13 @@ const router = createRouter({
     history: createWebHistory('/'), routes
 })
 
-
-router.beforeEach(async (to, from, next) => {
-
-    let isAuth = false
-
-    if (isAuth && to.fullPath != '/login') {
-        return next()
+router.beforeEach((to, from) => {
+    if (to.meta.requireAuth && !isAuth) {
+        return {
+            path: '/login',
+            query: { redirect: to.fullPath }
+        }
     }
-
-    return next({ name: 'login' })
 })
 
 export default router

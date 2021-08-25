@@ -1,50 +1,35 @@
 <template>
-  <div class="container">
-    <ul>
-      <li><router-link to="/">Home</router-link></li>
-      <li><router-link to="/user">User</router-link></li>
-      <li><router-link to="/task">Task</router-link></li>
-      <li><router-link to="/project">Project</router-link></li>
-    </ul>
+    <div style="display: flex;">
+      <nav>
+          <router-view name='Sidebar'></router-view>
+      </nav>
 
-    <div class="main-content">
-      <router-view></router-view>
+      <main>
+          <router-view></router-view>
+      </main>
     </div>
-  </div>
-
 </template>
 
 <script>
 
 export default {
-  name: 'App',
+    name: 'App',
 }
+
 </script>
 
 <style>
-  #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-    margin-top: 60px;
+  body {
+    display: flex;
   }
 
-  ul {
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
+  nav {
+    width: 25%;
   }
 
-  ul li {
-    display: inline-block;
-  }
-
-  ul li a {
-    text-decoration: none;
-    display: block;
-    padding: 10px;
+  main {
+    width: 100%;
+    margin-left: 100px;
   }
 
 </style>
