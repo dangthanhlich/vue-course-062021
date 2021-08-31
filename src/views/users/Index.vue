@@ -6,9 +6,9 @@
                  <router-link to="/user/create">Thêm mới</router-link>
             </el-button>
         </div>
-        <el-table :data="users" border style="width: 100%">
-            <el-table-column prop="fullname" label="Họ và tên"></el-table-column>
-            <el-table-column prop="phone" label="Điện thoại"></el-table-column>
+        <el-table :data="users" border style="width: 100%" v-loading="loading">
+            <el-table-column prop="id" label="ID" width="80" align="center"></el-table-column>
+            <el-table-column :formatter="fullnameFormat" label="Họ và tên"></el-table-column>
             <el-table-column prop="email" label="Email"></el-table-column>
             <el-table-column prop="birthday" label="Ngày sinh"></el-table-column>
             <el-table-column prop="gender" label="Giới tính" :formatter='genderFormat'></el-table-column>
@@ -17,63 +17,76 @@
                     <router-link :to="{name: 'user.edit', params: { id: 1 }}">
                         <el-button size="mini" icon="el-icon-edit"></el-button>
                     </router-link>
-
-                    <el-button size="mini" type="danger" icon="el-icon-delete" @click='deleteUser()'></el-button>
+                    <el-button size="mini" type="danger" icon="el-icon-delete" @click='deleteUser(scope.row)'></el-button>
                 </template>
             </el-table-column>
         </el-table>
 
         <el-pagination
             background
+            @current-change="changePage"
+            :page-size="pageSize"
             layout="prev, pager, next"
-            :total="1000">
+            :total="totalRecord">
         </el-pagination>
     </div>
 </template>
 
 <script>
-    export default {
-        name: 'UserIndex',
-        data() {
-            return {
-                users: [
-                    {
-                        fullname: 'Nguyễn Văn A',
-                        phone: '0942668586',
-                        email: 'aaa@gmail.com',
-                        birthday: '10/10/1988',
-                        gender: 1,
-                    },
-                    {
-                        fullname: 'Nguyễn Văn B',
-                        phone: '0942668586',
-                        email: 'aaa@gmail.com',
-                        birthday: '10/10/1988',
-                        gender: 2,
-                    }
-                ]
-            }
-        },
-        created() {
 
+import { getAllUser, deleteUser } from '@/api/user'
+
+export default {
+    name: 'UserIndex',
+    data() {
+        return {
+            users: [],
+            totalRecord: 0,
+            pageSize: 6,
+            currentPage: 1,
+            loading: false,
+        }
+    },
+    created() {
+        this.queryAll() 
+    },
+    methods: {
+        changePage(page) {
+            this.currentPage = page
+            this.queryAll()
         },
-        methods: {
-            genderFormat(row) {
-                return row.gender === 1 ? 'Nam' : 'Nữ'
-            },
-            deleteUser() {
-                this.$confirm('Bạn có thực sự muốn xoá?', 'SUNTECH', {
-                    confirmButtonText: 'OK',
-                    cancelButtonText: 'Cancel',
-                    type: 'warning'
-                }).then(() => {
+        queryAll() {
+            this.loading = true
+
+            getAllUser(`?page=${this.currentPage}`).then(res => {
+                this.users = res.data.data
+                this.totalRecord = res.data.total
+                this.loading = false
+            })
+        },
+        genderFormat(row) {
+            return row.gender === 1 ? 'Nam' : 'Nữ'
+        },
+        fullnameFormat(row) {
+            return row.first_name + ' ' + row.full_name
+        },
+        deleteUser(row) {
+
+            this.$confirm('Bạn có thực sự muốn xoá?', 'SUNTECH', {
+                confirmButtonText: 'OK',
+                cancelButtonText: 'Cancel',
+                type: 'warning'
+            }).then(() => {
+                deleteUser(row.id).then(res => {
                     this.$message({ type: 'success', message: 'Delete completed' });
-                }).catch(() => {
-                    this.$message({ type: 'info', message: 'Delete canceled' });
-                });
-            }
+                    this.queryAll()
+                })
+            }).catch(() => {
+                this.$message({ type: 'info', message: 'Delete canceled' });
+            });
         }
     }
+}
 </script>
 
 <style scoped>
