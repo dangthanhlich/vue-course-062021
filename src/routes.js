@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import App from './App'
 import Sidebar from './components/Sidebar'
 import Footer from './components/Footer'
 import Dashboard from './views/dashboard/Index'
@@ -11,6 +10,7 @@ import TaskIndex from './views/tasks/Index'
 import AuthLogin from './views/auth/Login'
 import ProjectIndex from './views/projects/Index'
 import NotFound from './views/vendor/NotFound'
+import User from './views/users/User'
 
 const routes = [
     {
@@ -26,12 +26,13 @@ const routes = [
         path: '/user',
         meta: { requireAuth: false },
         title: 'User management',
-        component: App,
+        component: User,
         children: [
             {
                 path: '',
                 name: 'user.index',
                 title: 'User List',
+                alias: '/user',
                 components: {
                     default: UserIndex,
                     Sidebar
