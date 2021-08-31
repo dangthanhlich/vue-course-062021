@@ -19,17 +19,26 @@ export default {
 </script>
 
 <style>
-  body {
-    display: flex;
-  }
-
-  nav {
-    width: 25%;
-  }
-
-  main {
-    width: 100%;
-    margin-left: 100px;
-  }
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #edf6f9;
+}
+.app {
+  display: flex;
+}
+main {
+  padding: 0 20px;
+  width: 100%;
+  max-width: 100%;
+}
+h2 {
+  margin-top: 0;
+  background-color: #457b9d;
+  height: 100%;
+  text-align: center;
+  border-radius: 5px;
+  padding: 10px;
+  color: #fff;
+}
 
 </style>

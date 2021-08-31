@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h2>Project management</h2>
+        <h2>Project Management</h2>
     </div>
 </template>
 

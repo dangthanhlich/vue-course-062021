@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h2>User management</h2>
+        <h2>User Management</h2>
         <div class="toolbar" style='text-align: right; margin-bottom: 10px;'>
             <el-button icon="el-icon-plus" size='mini'>
                  <router-link to="/user/create">Thêm mới</router-link>
@@ -17,13 +17,13 @@
                     <router-link :to="{name: 'user.edit', params: { id: 1 }}">
                         <el-button size="mini" icon="el-icon-edit"></el-button>
                     </router-link>
-                    
+
                     <el-button size="mini" type="danger" icon="el-icon-delete" @click='deleteUser()'></el-button>
                 </template>
             </el-table-column>
         </el-table>
-        
-        <el-pagination style="margin-top: 20px;"
+
+        <el-pagination
             background
             layout="prev, pager, next"
             :total="1000">
@@ -55,7 +55,7 @@
             }
         },
         created() {
-            
+
         },
         methods: {
             genderFormat(row) {
@@ -76,6 +76,25 @@
     }
 </script>
 
-<style>
-
+<style scoped>
+a {
+  text-decoration: none;
+}
+.el-table {
+  border-radius: 10px;
+}
+.user__index {
+  height: 100vh;
+}
+.toolbar {
+  text-align: right;
+  padding: 10px;
+}
+.el-pagination {
+  text-align: center;
+  padding: 30px;
+}
+.el-button {
+  margin: 5px;
+}
 </style>
